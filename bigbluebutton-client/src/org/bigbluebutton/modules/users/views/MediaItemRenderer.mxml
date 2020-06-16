@@ -287,31 +287,43 @@
 
 					if (data.hasStream) {
 						if (!webcamsOnlyForModerator || UsersUtil.amIModerator()) {
-							// if it's myself or if I'm watching all the streams from the given user, then don't activate the button
+							// Mod-Feature disabled
+
 							if (data.me || data.isViewingAllStreams()) {
-								webcamImg.visible = webcamImg.includeInLayout = true;
+								// If it's me or is in all streams perspective
+								webcamImg.visible = webcamImg.includeInLayout = true; // Webcam visible
 								webcamBtn.visible = webcamBtn.includeInLayout= false;
 							} else {
-								webcamImg.visible = webcamImg.includeInLayout = false;
+								// If it's not me and is not in all streams perspective
+								webcamImg.visible = webcamImg.includeInLayout = false; // Webcam hidden
 								webcamBtn.visible = webcamBtn.includeInLayout = true;
 							}
-						}
-						else {
-							if (data.me || data.isViewingAllStreams() && data.role == Role.MODERATOR) {
-								webcamImg.visible = webcamImg.includeInLayout = true;
+						} else {
+							// Mod-Feature enabled
+
+							if (data.me || data.isViewingAllStreams() && (data.role == Role.MODERATOR || !data.locked)) {
+								// It's me or a moderator OR unlocked user
+
+								webcamImg.visible = webcamImg.includeInLayout = true; // Webcam visible
 								webcamBtn.visible = webcamBtn.includeInLayout= false;
 							} else if (data.role != Role.MODERATOR) {
-								webcamImg.visible = false;
+								// If it's not a moderator
+
+								webcamImg.visible = false; // Webcam hidden
 								webcamImg.includeInLayout = true;
 								webcamBtn.visible = webcamBtn.includeInLayout = false;
 							}
 							else {
-								webcamImg.visible = webcamImg.includeInLayout = false;
+								// Something else
+
+								webcamImg.visible = webcamImg.includeInLayout = false; // Webcam hidden
 								webcamBtn.visible = webcamBtn.includeInLayout = true;
 							}
 						}
 					} else {
-						webcamImg.visible = false;
+						// User is not sharing the webcam
+
+						webcamImg.visible = false; // Webcam hidden
 						webcamImg.includeInLayout = true;
 						webcamBtn.visible = webcamBtn.includeInLayout = false;
 					}
