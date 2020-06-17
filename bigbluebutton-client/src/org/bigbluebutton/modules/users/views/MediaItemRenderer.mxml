@@ -61,6 +61,7 @@
 			import org.bigbluebutton.modules.users.model.UsersOptions;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
 			import org.bigbluebutton.common.logging.LogUtil;
+			import flash.external.ExternalInterface;
 			
 			[Bindable]
 			private var rolledOver:Boolean = false;
@@ -220,6 +221,7 @@
 
 			private function updateButtons(voiceMuted:Boolean = false):void {
 				LogUtil.warn("update buttons");
+				ExternalInterface.call("console.log","updateButtons sf89uf89wuf88wfehfh");
 
 				// reset the mute image filter so the talking indicator doesn't stick
 				muteImg.filters = null;
@@ -292,6 +294,9 @@
 						if (!webcamsOnlyForModerator || UsersUtil.amIModerator()) {
 							// Mod-Feature disabled
 
+							LogUtil.warn("Mod-Feature disabled");
+							ExternalInterface.call("console.log","Mod-Feature disabled 98vef8hjwhfh8gfg8zhfgaw");
+
 							if (data.me || data.isViewingAllStreams()) {
 								// If it's me or is in all streams perspective
 								webcamImg.visible = webcamImg.includeInLayout = true; // Webcam visible
@@ -303,6 +308,9 @@
 							}
 						} else {
 							// Mod-Feature enabled
+
+							LogUtil.warn("Mod-Feature enabled");
+							ExternalInterface.call("console.log","Mod-Feature enabled f<sjcjejcjj8eajjewjw<a");
 
 							if (data.me || data.isViewingAllStreams() && (data.role == Role.MODERATOR || !data.locked)) {
 								// It's me or a moderator OR unlocked user
