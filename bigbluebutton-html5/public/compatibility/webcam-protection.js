@@ -11,10 +11,10 @@ attachMutationObserver();
  */
 function attachMutationObserver() {
     // Create document mutation listener
-    let mutationObserver = new MutationObserver(function(mutations) {
+    let mutationObserver = new MutationObserver(function (mutations) {
 
         // Search for the right event type
-        mutations.forEach(function(mutation) {
+        mutations.forEach(function (mutation) {
             // Update the protection only for childList types to avoid a infinity loop
             if (mutation.type === "childList") {
 
@@ -66,13 +66,13 @@ function updateWebcamProtection() {
  * @return {boolean}
  */
 function isModerator() {
-   let flag = false;
+    let flag = false;
 
     // Search for user list
-    $("div[class^='userListColumn-']").each(function(i, element) {
+    $("div[class^='userListColumn-']").each(function (i, element) {
 
         // Is a settings button in the user list?
-        let isModerator = $("button", element).filter(function() {
+        let isModerator = $("button", element).filter(function () {
             return this.className.match(/\boptionsButton-/);
         }).length === 1;
 
@@ -91,7 +91,7 @@ function getUserStates() {
     let users = [];
 
     // Search for user items in the online list
-    $("div[class^='userName-']").each(function(i, element) {
+    $("div[class^='userName-']").each(function (i, element) {
         // Get the username of the entry item
         let username = $(element).children().children()[0].innerHTML.replace("&nbsp;", "");
 
@@ -110,10 +110,10 @@ function getUserStates() {
  */
 function setCameraVisible(targetUserName, visible) {
     // Search for all webcam items
-    $("div[class^='videoListItem-']").each(function(i, element) {
+    $("div[class^='videoListItem-']").each(function (i, element) {
 
         // Get username of the webcam item
-        let userName = $("span", element).filter(function() {
+        let userName = $("span", element).filter(function () {
             return this.className.match(/\buserName-/);
         })[0].innerHTML;
 
