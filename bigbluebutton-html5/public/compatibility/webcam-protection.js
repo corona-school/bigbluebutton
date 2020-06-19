@@ -44,7 +44,7 @@ function updateWebcamProtection() {
     for (let index in users) {
         let user = users[index];
         let locked = user.locked;
-        let isModerator = clientUser.role === "MODERATOR";
+        let isModerator = user.role === "MODERATOR";
 
         if(clientUser.userId !== user.userId) {
             // Update camera state based on locked and moderator state
