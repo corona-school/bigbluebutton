@@ -1,5 +1,5 @@
 // Load jquery
-var script = document.createElement('script');
+let script = document.createElement('script');
 script.src = "https://ajax.googleapis.com/ajax/libs/jquery/1.6.3/jquery.min.js";
 document.getElementsByTagName('head')[0].appendChild(script);
 
@@ -11,12 +11,12 @@ attachMutationObserver();
  */
 function attachMutationObserver() {
     // Create document mutation listener
-    var mutationObserver = new MutationObserver(function(mutations) {
+    let mutationObserver = new MutationObserver(function(mutations) {
 
         // Search for the right event type
         mutations.forEach(function(mutation) {
             // Update the protection only for childList types to avoid a infinity loop
-            if (mutation.type == "childList") {
+            if (mutation.type === "childList") {
 
                 // Update the protection
                 updateWebcamProtection();
@@ -85,7 +85,7 @@ function isModerator() {
 
 /**
  * Get all online users with their locked state
- * @return {map}
+ * @return {[]}
  */
 function getUserStates() {
     let users = [];
@@ -95,11 +95,8 @@ function getUserStates() {
         // Get the username of the entry item
         let username = $(element).children().children()[0].innerHTML.replace("&nbsp;", "");
 
-        // Get lock state of the user item
-        let locked = $(element).children().next().children().children().length == 1;
-
-        // Save to map
-        users[username] = locked;
+        // Get lock state of the user item and save it into the map
+        users[username] = $(element).children().next().children().children().length === 1;
     });
 
     return users;
