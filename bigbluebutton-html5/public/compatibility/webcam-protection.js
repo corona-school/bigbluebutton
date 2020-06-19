@@ -66,21 +66,23 @@ function updateWebcamProtection() {
  * @return {boolean}
  */
 function isModerator() {
-    let flag = false;
+    let isModerator = false;
 
     // Search for user list
     $("div[class^='userListColumn-']").each(function (i, element) {
 
         // Is a settings button in the user list?
-        let isModerator = $("button", element).filter(function () {
+        let hasOptionsButton = $("button", element).filter(function () {
             return this.className.match(/\boptionsButton-/);
         }).length === 1;
 
-        // Return the result
-        flag = true;
+        // Update moderator state
+        if (hasOptionsButton) {
+            isModerator = true;
+        }
     });
 
-    return flag;
+    return isModerator;
 }
 
 /**
