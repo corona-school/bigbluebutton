@@ -110,9 +110,18 @@ function setCameraVisible(targetUserName, visible) {
     $("div[class^='videoListItem-']").each(function (i, element) {
 
         // Get username of the webcam item
-        let userName = $("span", element).filter(function () {
+        let userNameSpan = $("span", element).filter(function () {
             return this.className.match(/\buserName-/);
-        })[0].innerHTML;
+        });
+
+        // Use dropdown instead if userNameSpan is not available (If more than 2 cameras are visible)
+        if(userNameSpan === undefined || userNameSpan.length === 0) {
+            userNameSpan = $("span", element).filter(function () {
+                return this.className.match(/\bdropdownTrigger-/);
+            });
+        }
+
+        let userName = userNameSpan[0].innerHTML;
 
         // Is the username equals to the target?
         if (targetUserName === userName) {
