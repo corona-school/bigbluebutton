@@ -38,42 +38,19 @@ function updateWebcamProtection() {
     // Get user states (username and locked state)
     let users = getUsers();
     let clientUser = getClientUser();
-    let isModerator = clientUser.role === "MODERATOR";
+    let isClientModerator = clientUser.role === "MODERATOR";
 
     // Update state of all users
     for (let index in users) {
         let user = users[index];
         let locked = user.locked;
+        let isModerator = clientUser.role === "MODERATOR";
 
         if(clientUser.userId !== user.userId) {
             // Update camera state based on locked and moderator state
-            setCameraVisible(clientUser.name, !locked || isModerator);
+            setCameraVisible(user.name, !locked || isModerator || isClientModerator);
         }
     }
-}
-
-/**
- * Is the current client a moderator?
- * @return {boolean}
- */
-function isModerator() {
-    let isModerator = false;
-
-    // Search for user list
-    $("div[class^='userListColumn-']").each(function (i, element) {
-
-        // Is a settings button in the user list?
-        let hasOptionsButton = $("button", element).filter(function () {
-            return this.className.match(/\boptionsButton-/);
-        }).length === 1;
-
-        // Update moderator state
-        if (hasOptionsButton) {
-            isModerator = true;
-        }
-    });
-
-    return isModerator;
 }
 
 /**
