@@ -36,23 +36,19 @@ function attachMutationObserver() {
  */
 function updateWebcamProtection() {
     // Get user states (username and locked state)
-    let userStates = getUserStates();
-
-    // The first user is always me
-    let skipUser = true;
+    let users = getUsers();
+    let clientUser = getClientUser();
+    let isModerator = clientUser.role === "MODERATOR";
 
     // Update state of all users
-    for (let username in userStates) {
-        let locked = userStates[username];
+    for (let index in users) {
+        let user = users[index];
+        let locked = user.locked;
 
-        // Skip the user because thats me! We don't want to hide our own camera.
-        if (skipUser) {
-            skipUser = false;
-            continue;
+        if(clientUser.userId !== user.userId) {
+            // Update camera state based on locked and moderator state
+            setCameraVisible(clientUser.name, !locked || isModerator);
         }
-
-        // Update camera state based on locked and moderator state
-        setCameraVisible(username, !locked || isModerator());
     }
 }
 
@@ -84,21 +80,38 @@ function isModerator() {
  * Get all online users with their locked state
  * @return {[]}
  */
-function getUserStates() {
-    let users = [];
-
-    // Search for user items in the online list
-    $("div[class^='userName-']").each(function (i, element) {
-        // Get the username of the entry item
-        let username = $(element).children().children()[0].innerHTML.replace("&nbsp;", "");
-
-        // Get lock state of the user item and save it into the map
-        users[username] = $(element).children().next().children().children().length === 1;
-    });
-
-    return users;
+function getUsers() {
+    return Meteor.connection._stores["users"]._getCollection().find().fetch();
 }
 
+/**
+ * Get user info of the current client (me)
+ * @return {[]}
+ */
+function getClientUserId() {
+    return Meteor.connection._stores["local-settings"]._getCollection().find().fetch()[0].userId;
+}
+
+/**
+ * Get the client user (me)
+ * @returns {*|Promise<Response>}
+ */
+function getClientUser() {
+    let clientId = getClientUserId();
+
+    let users = getUsers();
+    for (let index in users) {
+        let user = users[index];
+
+        // If the user has the same id
+        if (user.userId === clientId) {
+            return user;
+        }
+    }
+
+    // Client user not online?
+    return null;
+}
 
 /**
  * Change the camera visibility of the target user
@@ -115,7 +128,7 @@ function setCameraVisible(targetUserName, visible) {
         });
 
         // Use dropdown instead if userNameSpan is not available (If more than 2 cameras are visible)
-        if(userNameSpan === undefined || userNameSpan.length === 0) {
+        if (userNameSpan === undefined || userNameSpan.length === 0) {
             userNameSpan = $("span", element).filter(function () {
                 return this.className.match(/\bdropdownTrigger-/);
             });
