@@ -13,7 +13,7 @@ OPTIONS:
     -h      Print help
     -s      Setup HTML5 Development Client (Creates user and pulls repo)
     -i      Install HTML5 Development Client (Installs dependencies and setups development environment)
-    -u      User for HTML5 Development Client (Required for -s, -i, -r & -b)
+    -u      User for HTML5 Development Client (Required for -s, -i, -r & -p)
     -g      Git Repository of BigBlueButton (Required for -s)
     -b      Branch of Git Repository
     -r      Run HTML5 Development Client
@@ -22,13 +22,13 @@ OPTIONS:
 
 EXAMPLES:
 Setup & Install HTML5 Development Client
-    -s -i -u bbb -b corona-school -g "https://github.com/corona-school/bigbluebutton.git"
+    CMDTool.sh -s -i -u bbb -b corona-school -g "https://github.com/corona-school/bigbluebutton.git"
 
 Run HTML5 Development Client
-    -r -u bbb
+    CMDTool.sh -r -u bbb
 
 Build HTML5 Development Client & Start HTML5 Production Client
-    -p
+    CMDTool.sh -p -u bbb
     sudo systemctl start bbb-html5
 EOF
 }
