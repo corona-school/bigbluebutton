@@ -46,7 +46,7 @@ function updateWebcamProtection() {
         let locked = user.locked;
         let isModerator = user.role === "MODERATOR";
 
-        if(clientUser.userId !== user.userId) {
+        if(user.connectionStatus === "online" && clientUser.userId !== user.userId) {
             // Update camera state based on locked and moderator state
             setCameraVisible(user.name, !locked || isModerator || isClientModerator);
         }
