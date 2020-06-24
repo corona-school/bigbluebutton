@@ -145,8 +145,8 @@ EOF
 
 install() {
 cd "/home/$1/"
-apt-get install git-core ant ant-contrib openjdk-8-jdk-headless
-apt-get install screen
+apt-get install git-core ant ant-contrib openjdk-8-jdk-headless -y
+apt-get install screen -y
 sudo -i -u $1 bash << EOF
     cd ~
     echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.profile
@@ -182,7 +182,7 @@ EOF
 }
 
 cancel() {
-kill $(ls -laR /var/run/screen/ | grep bbb-html5-dev | cut -d " " -f 11 | cut -d "." -f 1)
+kill $(ls -laR /var/run/screen/ | grep bbb-html5-dev | cut -d " " -f 12 | cut -d "." -f 1)
 }
 
 build() {
