@@ -1,17 +1,32 @@
 // Init
-attachMeteorMessageListener(function(msg) {
+attachMeteorMessageListener(function (msg) {
     updateWebcamProtection();
 });
+
+/**
+ * The Meteor variable is not defined at the beginning.
+ * This function waits for the varaible to be defined.
+ * @param callback Meteor that is 100% defined
+ */
+function fetchMeteor(callback) {
+    if (typeof Meteor !== "undefined") {
+        callback(Meteor);
+    } else {
+        setTimeout(fetchMeteor(callback), 250);
+    }
+}
 
 /**
  * Create a change listener to update the webcam visibility
  */
 function attachMeteorMessageListener(onMeteorMessage) {
-    Meteor.connection._processOneDataMessageSuper = Meteor.connection._processOneDataMessage;
-    Meteor.connection._processOneDataMessage = function(msg, updates) {
-        Meteor.connection._processOneDataMessageSuper(msg, updates);
-        onMeteorMessage(msg);
-    };
+    fetchMeteor(function (meteorInstance) {
+        meteorInstance.connection._processOneDataMessageSuper = meteorInstance.connection._processOneDataMessage;
+        meteorInstance.connection._processOneDataMessage = function (msg, updates) {
+            meteorInstance.connection._processOneDataMessageSuper(msg, updates);
+            onMeteorMessage(msg);
+        };
+    });
 }
 
 /**
