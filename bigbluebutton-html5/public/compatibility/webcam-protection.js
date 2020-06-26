@@ -38,6 +38,9 @@ function updateWebcamProtection() {
     // Get user states (username and locked state)
     let users = getUsers();
     let clientUser = getClientUser();
+    if (clientUser === null)
+        return;
+
     let isClientModerator = clientUser.role === "MODERATOR";
 
     // Update state of all users
@@ -46,7 +49,7 @@ function updateWebcamProtection() {
         let locked = user.locked;
         let isModerator = user.role === "MODERATOR";
 
-        if(user.connectionStatus === "online" && clientUser.userId !== user.userId) {
+        if (user.connectionStatus === "online" && clientUser.userId !== user.userId) {
             // Update camera state based on locked and moderator state
             setCameraVisible(user.name, !locked || isModerator || isClientModerator);
         }
@@ -66,7 +69,12 @@ function getUsers() {
  * @return {[]}
  */
 function getClientUserId() {
-    return Meteor.connection._stores["local-settings"]._getCollection().find().fetch()[0].userId;
+    let clientSettings = Meteor.connection._stores["local-settings"]._getCollection().find().fetch();
+    if (clientSettings.length === 0) {
+        return null;
+    } else {
+        return client[0].userId;
+    }
 }
 
 /**
@@ -75,6 +83,8 @@ function getClientUserId() {
  */
 function getClientUser() {
     let clientId = getClientUserId();
+    if (clientId === null)
+        return null;
 
     let users = getUsers();
     for (let index in users) {
