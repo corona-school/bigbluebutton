@@ -1,35 +1,18 @@
 // Init
-attachMutationObserver();
+attachMeteorMessageListener(function(msg) {
+    updateWebcamProtection();
+});
 
 /**
- * Create a document change listener to update the webcam visibility
+ * Create a change listener to update the webcam visibility
  */
-function attachMutationObserver() {
-    // Create document mutation listener
-    let mutationObserver = new MutationObserver(function (mutations) {
-
-        // Search for the right event type
-        mutations.forEach(function (mutation) {
-            // Update the protection only for childList types to avoid a infinity loop
-            if (mutation.type === "childList") {
-
-                // Update the protection
-                updateWebcamProtection();
-            }
-        });
-    });
-
-    // Listen for document changes
-    mutationObserver.observe(document.documentElement, {
-        attributes: true,
-        characterData: true,
-        childList: true,
-        subtree: true,
-        attributeOldValue: true,
-        characterDataOldValue: true
-    });
+function attachMeteorMessageListener(onMeteorMessage) {
+    Meteor.connection._processOneDataMessageSuper = Meteor.connection._processOneDataMessage;
+    Meteor.connection._processOneDataMessage = function(msg, updates) {
+        Meteor.connection._processOneDataMessageSuper(msg, updates);
+        onMeteorMessage(msg);
+    };
 }
-
 
 /**
  * Update the camera visibility of all users based on the locked state
@@ -62,10 +45,15 @@ function updateWebcamProtection() {
  */
 function getUsers() {
     if (typeof Meteor !== 'undefined') {
-        return Meteor.connection._stores["users"]._getCollection().find().fetch();
-    } else {
-        return [];
+        let collectionSource = Meteor.connection._stores["users"];
+
+        // Undefined check for the collection source
+        if (typeof collectionSource !== 'undefined') {
+            return collectionSource._getCollection().find().fetch();
+        }
     }
+
+    return [];
 }
 
 /**
@@ -74,15 +62,21 @@ function getUsers() {
  */
 function getClientUserId() {
     if (typeof Meteor !== 'undefined') {
-        let clientSettings = Meteor.connection._stores["local-settings"]._getCollection().find().fetch();
-        if (clientSettings.length === 0) {
-            return null;
-        } else {
-            return clientSettings[0].userId;
+        let collectionSource = Meteor.connection._stores["local-settings"];
+
+        // Undefined check for the collection source
+        if (typeof collectionSource !== 'undefined') {
+            let clientSettings = collectionSource._getCollection().find().fetch();
+
+            if (clientSettings.length === 0) {
+                return null;
+            } else {
+                return clientSettings[0].userId;
+            }
         }
-    } else {
-        return [];
     }
+
+    return [];
 }
 
 /**
