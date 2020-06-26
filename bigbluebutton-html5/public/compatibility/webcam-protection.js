@@ -61,7 +61,11 @@ function updateWebcamProtection() {
  * @return {[]}
  */
 function getUsers() {
-    return Meteor.connection._stores["users"]._getCollection().find().fetch();
+    if (typeof Meteor !== 'undefined') {
+        return Meteor.connection._stores["users"]._getCollection().find().fetch();
+    } else {
+        return [];
+    }
 }
 
 /**
@@ -69,11 +73,15 @@ function getUsers() {
  * @return {[]}
  */
 function getClientUserId() {
-    let clientSettings = Meteor.connection._stores["local-settings"]._getCollection().find().fetch();
-    if (clientSettings.length === 0) {
-        return null;
+    if (typeof Meteor !== 'undefined') {
+        let clientSettings = Meteor.connection._stores["local-settings"]._getCollection().find().fetch();
+        if (clientSettings.length === 0) {
+            return null;
+        } else {
+            return clientSettings[0].userId;
+        }
     } else {
-        return clientSettings[0].userId;
+        return [];
     }
 }
 
