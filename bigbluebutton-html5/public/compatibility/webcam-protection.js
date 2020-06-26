@@ -12,7 +12,7 @@ function fetchMeteor(callback) {
     if (typeof Meteor !== "undefined") {
         callback(Meteor);
     } else {
-        setTimeout(fetchMeteor, 250);
+        setTimeout(fetchMeteor, 250, callback);
     }
 }
 
