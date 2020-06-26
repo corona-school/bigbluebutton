@@ -73,7 +73,7 @@ function getClientUserId() {
     if (clientSettings.length === 0) {
         return null;
     } else {
-        return client[0].userId;
+        return clientSettings[0].userId;
     }
 }
 
