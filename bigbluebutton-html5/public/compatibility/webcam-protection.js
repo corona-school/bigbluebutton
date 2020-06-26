@@ -5,7 +5,7 @@ attachMeteorMessageListener(function (msg) {
 
 /**
  * The Meteor variable is not defined at the beginning.
- * This function waits for the varaible to be defined.
+ * This function waits for the variable to be defined.
  * @param callback Meteor that is 100% defined
  */
 function fetchMeteor(callback) {
