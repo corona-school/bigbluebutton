@@ -51,14 +51,30 @@ serverURL_cmd="s#bigbluebutton.web.serverURL=.*#bigbluebutton.web.serverURL=$ser
 secret_cmd="s#securitySalt=.*#securitySalt=$secret#g"
 
 echo Change values in bigbluebutton.properties
+echo "set meetingExpireIfNoUserJoinedInMinutes=15"
+sed -i 's/meetingExpireIfNoUserJoinedInMinutes.*/meetingExpireIfNoUserJoinedInMinutes=15/g' grails-app/conf/bigbluebutton.properties
+
+echo "set meetingExpireWhenLastUserLeftInMinutes=15"
+sed -i 's/meetingExpireWhenLastUserLeftInMinutes.*/meetingExpireWhenLastUserLeftInMinutes=15/g' grails-app/conf/bigbluebutton.properties
+
+echo "set bigbluebutton.web.logoutURL=www.corona-school.de"
+sed -i 's/bigbluebutton.web.logoutURL.*/bigbluebutton.web.logoutURL=www.corona-school.de/g' grails-app/conf/bigbluebutton.properties
+
+echo "set allowStartStopRecording=false"
+sed -i 's/allowStartStopRecording=.*/allowStartStopRecording=false/g' grails-app/conf/bigbluebutton.properties
+
 echo "set attendeesJoinViaHTML5Client=true"
 sed -i 's/attendeesJoinViaHTML5Client=.*/attendeesJoinViaHTML5Client=true/g' grails-app/conf/bigbluebutton.properties
+
 echo "set moderatorsJoinViaHTML5Client=true"
 sed -i 's/moderatorsJoinViaHTML5Client=.*/moderatorsJoinViaHTML5Client=true/g' grails-app/conf/bigbluebutton.properties
+
 echo "lockSettingsDisablePrivateChat=true"
 sed -i 's/lockSettingsDisablePrivateChat=.*/lockSettingsDisablePrivateChat=true/g' grails-app/conf/bigbluebutton.properties
+
 echo "set bigbluebutton.web.serverURL=${serverURL}"
 sed -i $serverURL_cmd grails-app/conf/bigbluebutton.properties
+
 echo "set securitySalt=${secret}"
 sed -i $secret_cmd grails-app/conf/bigbluebutton.properties
 

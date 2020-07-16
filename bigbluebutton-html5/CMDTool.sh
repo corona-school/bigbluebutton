@@ -164,6 +164,9 @@ sudo -i -u $1 bash << EOF
     curl https://install.meteor.com/ | sh
     meteor update --allow-superuser --release 1.8
     wsUrl="$(grep 'wsUrl' /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml | xargs)"
+    if [ -z "$wsUrl" ]; then
+        err "wsUrl not found when executing grep in /usr/share/meteor/bundle/programs/server/assets/app/config/settings.yml"
+    fi
     sed -i "s|wsUrl.*|$wsUrl|" private/config/settings.yml
 EOF
 cd "/home/$1/dev/bigbluebutton/bigbluebutton-html5/"
